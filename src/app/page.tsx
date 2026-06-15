@@ -14,10 +14,10 @@ const items = [
   },
   {
     id: 2,
-    name: "Helmet",
+    name: "Duck",
     price: "$18.00",
-    image: "https://modelviewer.dev/shared-assets/models/reflective-sphere.webp",
-    model: "https://modelviewer.dev/shared-assets/models/reflective-sphere.glb",
+    image: "https://modelviewer.dev/shared-assets/models/Duck.webp",
+    model: "https://modelviewer.dev/shared-assets/models/Duck.glb",
   },
 ];
 
