@@ -1,11 +1,13 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { forwardRef } from "react";
+import type { ModelViewerHandle } from "./ModelViewer";
 
 const ModelViewer = dynamic(() => import("./ModelViewer"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[400px] bg-gray-100 animate-pulse rounded-xl" />
+    <div className="w-full h-full bg-gray-900 animate-pulse" />
   ),
 });
 
@@ -15,6 +17,9 @@ type Props = {
   alt: string;
 };
 
-export default function ModelViewerClient(props: Props) {
-  return <ModelViewer {...props} />;
-}
+const ModelViewerClient = forwardRef<ModelViewerHandle, Props>((props, ref) => {
+  return <ModelViewer ref={ref} {...props} />;
+});
+
+ModelViewerClient.displayName = "ModelViewerClient";
+export default ModelViewerClient;
