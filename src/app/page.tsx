@@ -14,10 +14,10 @@ const items = [
   },
   {
     id: 2,
-    name: "Duck",
+    name: "Astronaut 2",
     price: "$18.00",
-    image: "https://modelviewer.dev/shared-assets/models/Duck.webp",
-    model: "https://modelviewer.dev/shared-assets/models/Duck.glb",
+    image: "https://modelviewer.dev/shared-assets/models/Astronaut.webp",
+    model: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
   },
 ];
 

@@ -38,7 +38,7 @@ const ModelViewer = forwardRef<ModelViewerHandle, Props>(
         loading="eager"
         style={{
           width: "100%",
-          height: "100%",
+          height: "70%",
           position: "absolute",
           top: 0,
           left: 0,
