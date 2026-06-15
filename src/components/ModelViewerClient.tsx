@@ -6,9 +6,7 @@ import type { ModelViewerHandle } from "./ModelViewer";
 
 const ModelViewer = dynamic(() => import("./ModelViewer"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-gray-900 animate-pulse" />
-  ),
+  loading: () => <div className="w-full h-full bg-black animate-pulse" />,
 });
 
 type Props = {

@@ -1,80 +1,117 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ModelViewerClient from "@/components/ModelViewerClient";
-import type { ModelViewerHandle } from "@/components/ModelViewer";
 
 const items = [
   {
     id: 1,
-    name: "Astronaut",
-    price: "$12.00",
+    name: "Grilled Salmon",
+    price: "$24.00",
+    description: "Fresh Atlantic salmon with lemon butter and seasonal vegetables.",
     image: "https://modelviewer.dev/shared-assets/models/Astronaut.webp",
     model: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
   },
   {
     id: 2,
-    name: "Astronaut 2",
+    name: "Wagyu Burger",
     price: "$18.00",
+    description: "200g wagyu patty, caramelized onions, truffle mayo, brioche bun.",
+    image: "https://modelviewer.dev/shared-assets/models/reflective-sphere.webp",
+    model: "https://modelviewer.dev/shared-assets/models/reflective-sphere.glb",
+  },
+  {
+    id: 3,
+    name: "Margherita Pizza",
+    price: "$16.00",
+    description: "San Marzano tomato, fresh mozzarella, basil, extra virgin olive oil.",
     image: "https://modelviewer.dev/shared-assets/models/Astronaut.webp",
     model: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
   },
 ];
 
-export default function Home() {
-  const [selected, setSelected] = useState(items[0]);
-  const mvRef = useRef<ModelViewerHandle>(null);
+type Item = typeof items[0];
 
-  function selectItem(item: typeof items[0]) {
-    setSelected(item);
-    mvRef.current?.setSrc(item.model);
-  }
+export default function Home() {
+  const [activeModel, setActiveModel] = useState<Item | null>(null);
 
   return (
-    <div className="relative w-full h-screen bg-black overflow-hidden">
+    <div className="min-h-screen bg-[#f8f7f4]">
 
-      {/* FULLSCREEN 3D / AR VIEWER */}
-      <ModelViewerClient
-        ref={mvRef}
-        src={selected.model}
-        poster={selected.image}
-        alt={selected.name}
-      />
-
-      {/* TOP BAR */}
-      <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-4 pt-10 pb-4 bg-gradient-to-b from-black/60 to-transparent">
-        <h1 className="text-white text-lg font-semibold">AR Menu</h1>
-        <span className="text-white/70 text-sm">by WeTrends</span>
+      {/* HEADER */}
+      <div className="sticky top-0 z-10 bg-[#f8f7f4] px-5 pt-12 pb-4 border-b border-black/5">
+        <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">WeTrends</p>
+        <h1 className="text-2xl font-bold text-gray-900">Our Menu</h1>
       </div>
 
-      {/* SELECTED ITEM INFO */}
-      <div className="absolute top-1/2 left-4 z-10 -translate-y-1/2">
-        <p className="text-white text-xl font-bold drop-shadow">{selected.name}</p>
-        <p className="text-white/80 text-base drop-shadow">{selected.price}</p>
-      </div>
-
-      {/* BOTTOM ITEM TRAY */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/80 to-transparent px-4 pb-8 pt-12">
-        <div className="flex gap-3 overflow-x-auto scrollbar-none">
-          {items.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => selectItem(item)}
-              className={`flex-shrink-0 w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all duration-200 ${
-                selected.id === item.id
-                  ? "border-white scale-110"
-                  : "border-white/30 opacity-60"
-              }`}
-            >
+      {/* MENU LIST */}
+      <div className="px-4 py-4 flex flex-col gap-4 pb-24">
+        {items.map((item) => (
+          <div
+            key={item.id}
+            className="bg-white rounded-3xl overflow-hidden shadow-sm"
+          >
+            {/* DISH IMAGE */}
+            <div className="relative w-full h-52">
               <img
                 src={item.image}
                 alt={item.name}
                 className="w-full h-full object-cover"
               />
-            </button>
-          ))}
-        </div>
+            </div>
+
+            {/* DISH INFO */}
+            <div className="px-5 py-4">
+              <div className="flex items-start justify-between mb-1">
+                <h2 className="text-lg font-semibold text-gray-900">{item.name}</h2>
+                <span className="text-lg font-semibold text-gray-900 ml-2 shrink-0">{item.price}</span>
+              </div>
+              <p className="text-sm text-gray-500 mb-4 leading-relaxed">{item.description}</p>
+
+              {/* VIEW 3D BUTTON */}
+              <button
+                onClick={() => setActiveModel(item)}
+                className="w-full py-3 rounded-2xl bg-gray-900 text-white text-sm font-medium tracking-wide active:scale-95 transition-transform"
+              >
+                View in 3D
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
+
+      {/* 3D MODAL */}
+      {activeModel && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex flex-col">
+
+          {/* CLOSE + TITLE */}
+          <div className="flex items-center justify-between px-5 pt-12 pb-4">
+            <div>
+              <h2 className="text-white text-lg font-semibold">{activeModel.name}</h2>
+              <p className="text-white/50 text-sm">{activeModel.price}</p>
+            </div>
+            <button
+              onClick={() => setActiveModel(null)}
+              className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white text-lg"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* MODEL VIEWER */}
+          <div className="relative flex-1">
+            <ModelViewerClient
+              src={activeModel.model}
+              poster={activeModel.image}
+              alt={activeModel.name}
+            />
+          </div>
+
+          <p className="text-center text-white/30 text-xs pb-8">
+            Drag to rotate
+          </p>
+        </div>
+      )}
 
     </div>
   );
